@@ -1,4 +1,4 @@
-package smokovsky.motivatinglist;
+package smokovsky.motivatinglist.controllers.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,21 +13,25 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import smokovsky.motivatinglist.R;
+import smokovsky.motivatinglist.controllers.fileController.FileIO;
+import smokovsky.motivatinglist.model.Todo;
+
 
 public class TodoEditFragment extends Fragment implements View.OnClickListener {
 
-    private ArrayList<String> todoList = new ArrayList<String>();
+    private ArrayList<Todo> todoList = new ArrayList<Todo>();
     private ArrayAdapter todoAdapter;
     private int position;
 
-    private String todoName;
-    private EditText changeNameInput;
+    private Todo todo = new Todo("", false);
+    private EditText todoNameInput;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_edit_name, container, false);
 
-        changeNameInput = (EditText) view.findViewById(R.id.name_edittext);
+        todoNameInput = (EditText) view.findViewById(R.id.name_edittext);
         Button changeNameButton = (Button) view.findViewById(R.id.change_name_button);
         Button deleteButton = (Button) view.findViewById(R.id.delete_button);
         Button cancelButton = (Button) view.findViewById(R.id.cancel_button);
@@ -36,11 +40,12 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
         deleteButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
 
-        changeNameInput.setText(todoName);
+        todoNameInput.setText(todo.getTodoName());
+
         return view;
     }
 
-    public static TodoEditFragment newInstance(ArrayList<String> todoList, ArrayAdapter<String> todoAdapter, int position) {
+    public static TodoEditFragment newInstance(ArrayList<Todo> todoList, ArrayAdapter<Todo> todoAdapter, int position) {
         TodoEditFragment fragment = new TodoEditFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -49,8 +54,7 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
         fragment.todoList = todoList;
         fragment.position = position;
 
-
-        fragment.todoName = todoList.get(position);
+        fragment.todo = todoList.get(position);
 
         return fragment;
     }
@@ -58,20 +62,26 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.cancel_button:
-                Toast.makeText(getContext(), "No problem ^^", Toast.LENGTH_SHORT).show();
-                Objects.requireNonNull(getActivity()).onBackPressed();
-                break;
+
             case R.id.change_name_button:
-                todoList.set(position, String.valueOf(changeNameInput.getText()));
-                Toast.makeText(getContext(), "Task " + position +" wants to get name changed", Toast.LENGTH_SHORT).show();
+                todoList.set(position, new Todo(todoNameInput.getText().toString(), false));
+                Toast.makeText(getContext(), "Task " + position +" name has been changed", Toast.LENGTH_SHORT).show();
+//                todo: tutaj zapisujemy dane
+                FileIO.saveDataToFile(todoList, getContext());
                 todoAdapter.notifyDataSetChanged();
                 Objects.requireNonNull(getActivity()).onBackPressed();
                 break;
+
             case R.id.delete_button:
                 todoList.remove(position);
-                Toast.makeText(getContext(), "Task " + position + " wants to be deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Task " + position + " has been deleted", Toast.LENGTH_SHORT).show();
+//                todo: tutaj zapisujemy dane
+                FileIO.saveDataToFile(todoList, getContext());
                 todoAdapter.notifyDataSetChanged();
+                Objects.requireNonNull(getActivity()).onBackPressed();
+                break;
+
+            case R.id.cancel_button:
                 Objects.requireNonNull(getActivity()).onBackPressed();
                 break;
         }

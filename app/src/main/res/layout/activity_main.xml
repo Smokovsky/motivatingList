@@ -6,18 +6,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".controllers.activities.MainActivity">
 
     <fragment
         android:id="@+id/edit_name_fragment"
-        android:name="smokovsky.motivatinglist.TodoEditFragment"
+        android:name="smokovsky.motivatinglist.controllers.fragments.TodoEditFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_edit_name" />
 
     <fragment
         android:id="@+id/to_do_list_fragment"
-        android:name="smokovsky.motivatinglist.TodoListFragment"
+        android:name="smokovsky.motivatinglist.controllers.fragments.TodoListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_todo_list" />

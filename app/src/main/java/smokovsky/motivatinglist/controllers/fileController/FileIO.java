@@ -1,4 +1,4 @@
-package smokovsky.motivatinglist;
+package smokovsky.motivatinglist.controllers.fileController;
 
 import android.content.Context;
 
@@ -10,17 +10,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import smokovsky.motivatinglist.model.Todo;
+
 public class FileIO {
 
-    public static final String FILENAME = "listinfo.dat";
+    public static final String FILENAME = "saveFile.dat";
 
-    public static void saveDataToFile(ArrayList<String> items, Context context){
+    public static void saveDataToFile(ArrayList<Todo> itemsList, Context context){
 
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(items);
+            oos.writeObject(itemsList);
             oos.close();
+            fos.close();
         } catch (FileNotFoundException e){
             e.printStackTrace();
         } catch(IOException e){
@@ -28,17 +31,17 @@ public class FileIO {
         }
     }
 
+    public static ArrayList<Todo> loadDataFromFile(Context context){
 
-    public static ArrayList<String> loadDataFromFile(Context context){
-
-        ArrayList<String> itemsList = null;
+        ArrayList<Todo> itemsList = null;
 
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            itemsList = (ArrayList<String>) ois.readObject();
+            itemsList = (ArrayList<Todo>) ois.readObject();
+            fis.close();
         } catch (FileNotFoundException e){
-            itemsList = new ArrayList();
+            itemsList = new ArrayList<Todo>();
             e.printStackTrace();
         } catch(IOException e){
             e.printStackTrace();
