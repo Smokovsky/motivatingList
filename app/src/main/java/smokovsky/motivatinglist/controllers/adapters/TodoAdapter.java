@@ -1,6 +1,8 @@
 package smokovsky.motivatinglist.controllers.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +15,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import smokovsky.motivatinglist.R;
+import smokovsky.motivatinglist.controllers.activities.MainActivity;
 import smokovsky.motivatinglist.controllers.fileController.FileIO;
+import smokovsky.motivatinglist.controllers.fragments.TodoListFragment;
 import smokovsky.motivatinglist.model.Todo;
 
 public class TodoAdapter extends ArrayAdapter<Todo> {
 
     private ArrayList<Todo> todoList;
-
 
     public TodoAdapter(Context context, ArrayList<Todo> todoList) {
         super(context, R.layout.todo_row, todoList);
@@ -33,31 +36,54 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         final View todoRow = layoutInflater.inflate(R.layout.todo_row, parent, false);
 
         TextView todoName = (TextView) todoRow.findViewById(R.id.todo_name);
-        Button doneTodo = (Button) todoRow.findViewById(R.id.todo_done_button);
-        Button deleteTodo = (Button) todoRow.findViewById(R.id.todo_delete_button);
+        Button doneTodoButton = (Button) todoRow.findViewById(R.id.todo_done_button);
+        Button deleteTodoButton = (Button) todoRow.findViewById(R.id.todo_delete_button);
         LinearLayout background = (LinearLayout) todoRow.findViewById(R.id.todo_background);
 
-
-        deleteTodo.setOnClickListener(new View.OnClickListener(){
+        deleteTodoButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Task " + position + " has been deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Task has been deleted", Toast.LENGTH_SHORT).show();
+                if(getItem(position).getTodoStatus())
+                    MainActivity.profile.addPoints(-(getItem(position).getTodoRewardPoints()));
                 todoList.remove(position);
+                TodoListFragment.sortTodoListByStatus(todoList);
 //                todo: tutaj zapisujemy dane
                 FileIO.saveDataToFile(todoList, getContext());
                 notifyDataSetChanged();
             }
         });
 
-        doneTodo.setOnClickListener(new View.OnClickListener() {
+        doneTodoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                boolean todoStatus = getItem(position).getTodoStatus();
+                if(todoStatus) {
+                    MainActivity.profile.addPoints(-getItem(position).getTodoRewardPoints());
+                } else {
+                    MainActivity.profile.addPoints(getItem(position).getTodoRewardPoints());
+                }
+                getItem(position).setTodoStatus(!todoStatus);
+                TodoListFragment.sortTodoListByStatus(todoList);
+                notifyDataSetChanged();
             }
         });
 
-        todoName.setText(getItem(position).getTodoName());
+        if(getItem(position).getTodoStatus()) {
+            background.setBackgroundColor(Color.rgb(128,128,128));
+            todoName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            doneTodoButton.setText("Undo");
+            doneTodoButton.setBackgroundColor(Color.rgb(96,96,96));
+            deleteTodoButton.setBackgroundColor(Color.rgb(96,96,96));
+        } else {
+            background.setBackgroundColor(Color.rgb(239, 239, 239));
+            todoName.setPaintFlags(0);
+            doneTodoButton.setText("Done");
+            doneTodoButton.setBackgroundColor(Color.rgb(192,192,192));
+            deleteTodoButton.setBackgroundColor(Color.rgb(192,192,192));
+        }
 
+        todoName.setText(getItem(position).getTodoName() + " (" + getItem(position).getTodoRewardPoints() + ")");
         return todoRow;
     }
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import smokovsky.motivatinglist.R;
+import smokovsky.motivatinglist.controllers.activities.MainActivity;
 import smokovsky.motivatinglist.controllers.fileController.FileIO;
 import smokovsky.motivatinglist.model.Todo;
 
@@ -24,7 +25,7 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
     private ArrayAdapter todoAdapter;
     private int position;
 
-    private Todo todo = new Todo("", false);
+    private Todo todo = new Todo();
     private EditText todoNameInput;
 
     @Override
@@ -64,8 +65,8 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
         switch(v.getId()){
 
             case R.id.change_name_button:
-                todoList.set(position, new Todo(todoNameInput.getText().toString(), false));
-                Toast.makeText(getContext(), "Task " + position +" name has been changed", Toast.LENGTH_SHORT).show();
+                todoList.set(position, new Todo(todoNameInput.getText().toString(), false, 0));
+                Toast.makeText(getContext(), "Task name has been changed", Toast.LENGTH_SHORT).show();
 //                todo: tutaj zapisujemy dane
                 FileIO.saveDataToFile(todoList, getContext());
                 todoAdapter.notifyDataSetChanged();
@@ -73,8 +74,11 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.delete_button:
+                if(todoList.get(position).getTodoStatus())
+                    MainActivity.profile.addPoints(-(todoList.get(position).getTodoRewardPoints()));
                 todoList.remove(position);
-                Toast.makeText(getContext(), "Task " + position + " has been deleted", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Task has been deleted", Toast.LENGTH_SHORT).show();
+                TodoListFragment.sortTodoListByStatus(todoList);
 //                todo: tutaj zapisujemy dane
                 FileIO.saveDataToFile(todoList, getContext());
                 todoAdapter.notifyDataSetChanged();
