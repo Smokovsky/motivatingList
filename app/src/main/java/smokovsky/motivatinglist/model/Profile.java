@@ -7,7 +7,7 @@ public class Profile {
     int points;
 
     public Profile(){
-        name = "unnamed";
+        name = "Unnamed";
         points=0;
     }
 

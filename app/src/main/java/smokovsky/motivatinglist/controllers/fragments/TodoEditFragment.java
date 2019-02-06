@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,27 +22,40 @@ import smokovsky.motivatinglist.model.Todo;
 
 public class TodoEditFragment extends Fragment implements View.OnClickListener {
 
-    private ArrayList<Todo> todoList = new ArrayList<Todo>();
+    private ArrayList<Todo> todoList = new ArrayList<>();
     private ArrayAdapter todoAdapter;
-    private int position;
 
-    private Todo todo = new Todo();
+    private int position;
+    private Todo todo;
+
     private EditText todoNameInput;
+    private EditText todoRewardPointsInput;
+
+    private TextView todoDateTime;
+
+    private Button saveButton;
+    private Button deleteButton;
+    private Button cancelButton;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_edit_name, container, false);
+        View view =  inflater.inflate(R.layout.fragment_todo_edit, container, false);
 
-        todoNameInput = (EditText) view.findViewById(R.id.name_edittext);
-        Button changeNameButton = (Button) view.findViewById(R.id.change_name_button);
-        Button deleteButton = (Button) view.findViewById(R.id.delete_button);
-        Button cancelButton = (Button) view.findViewById(R.id.cancel_button);
+        todoNameInput = (EditText) view.findViewById(R.id.todo_name_field);
+        todoRewardPointsInput = (EditText) view.findViewById(R.id.todo_points_field);
+        todoDateTime = (TextView) view.findViewById(R.id.todo_date_time);
+        saveButton = (Button) view.findViewById(R.id.save_button);
+        deleteButton = (Button) view.findViewById(R.id.delete_button);
+        cancelButton = (Button) view.findViewById(R.id.cancel_button);
 
-        changeNameButton.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
 
         todoNameInput.setText(todo.getTodoName());
+        todoRewardPointsInput.setText(new Integer(todo.getTodoRewardPoints()).toString());
+        todoDateTime.setText("created: " + todo.getTodoDateTime());
 
         return view;
     }
@@ -64,9 +78,11 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch(v.getId()){
 
-            case R.id.change_name_button:
-                todoList.set(position, new Todo(todoNameInput.getText().toString(), false, 0));
-                Toast.makeText(getContext(), "Task name has been changed", Toast.LENGTH_SHORT).show();
+            case R.id.save_button:
+
+                todo.setTodoName(todoNameInput.getText().toString());
+                todo.setTodoRewardPoints(new Integer(todoRewardPointsInput.getText().toString()));
+                Toast.makeText(getContext(), "Task has been saved", Toast.LENGTH_SHORT).show();
 //                todo: tutaj zapisujemy dane
                 FileIO.saveDataToFile(todoList, getContext());
                 todoAdapter.notifyDataSetChanged();
@@ -74,11 +90,12 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.delete_button:
-                if(todoList.get(position).getTodoStatus())
-                    MainActivity.profile.addPoints(-(todoList.get(position).getTodoRewardPoints()));
+                if(todo.getTodoStatus())
+                    MainActivity.profile.addPoints(-(todo.getTodoRewardPoints()));
                 todoList.remove(position);
                 Toast.makeText(getContext(), "Task has been deleted", Toast.LENGTH_SHORT).show();
                 TodoListFragment.sortTodoListByStatus(todoList);
+                TodoListFragment.updatePointsMeter();
 //                todo: tutaj zapisujemy dane
                 FileIO.saveDataToFile(todoList, getContext());
                 todoAdapter.notifyDataSetChanged();

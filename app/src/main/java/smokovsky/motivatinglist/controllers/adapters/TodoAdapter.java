@@ -48,7 +48,8 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
                     MainActivity.profile.addPoints(-(getItem(position).getTodoRewardPoints()));
                 todoList.remove(position);
                 TodoListFragment.sortTodoListByStatus(todoList);
-//                todo: tutaj zapisujemy dane
+                TodoListFragment.updatePointsMeter();
+//               ! tutaj zapisujemy dane !
                 FileIO.saveDataToFile(todoList, getContext());
                 notifyDataSetChanged();
             }
@@ -65,10 +66,13 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
                 }
                 getItem(position).setTodoStatus(!todoStatus);
                 TodoListFragment.sortTodoListByStatus(todoList);
+                //TODO punkty update wiodiku
+                TodoListFragment.updatePointsMeter();
                 notifyDataSetChanged();
             }
         });
 
+//        Zmiana wyglądu pozycji na podstawie todoStatus
         if(getItem(position).getTodoStatus()) {
             background.setBackgroundColor(Color.rgb(128,128,128));
             todoName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
@@ -84,6 +88,7 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         }
 
         todoName.setText(getItem(position).getTodoName() + " (" + getItem(position).getTodoRewardPoints() + ")");
+
         return todoRow;
     }
 }
