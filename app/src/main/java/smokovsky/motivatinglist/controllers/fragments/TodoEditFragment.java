@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import smokovsky.motivatinglist.R;
-import smokovsky.motivatinglist.controllers.activities.MainActivity;
 import smokovsky.motivatinglist.controllers.fileController.FileIO;
 import smokovsky.motivatinglist.model.Todo;
 
@@ -31,9 +30,10 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
     private EditText todoNameInput;
     private EditText todoRewardPointsInput;
 
-    private TextView todoDateTime;
+    private TextView todoNewDateTime;
+    private TextView todoEndDateTime;
 
-    private Button saveButton;
+    private Button acceptButton;
     private Button deleteButton;
     private Button cancelButton;
 
@@ -44,18 +44,23 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
 
         todoNameInput = (EditText) view.findViewById(R.id.todo_name_field);
         todoRewardPointsInput = (EditText) view.findViewById(R.id.todo_points_field);
-        todoDateTime = (TextView) view.findViewById(R.id.todo_date_time);
-        saveButton = (Button) view.findViewById(R.id.save_button);
+        todoNewDateTime = (TextView) view.findViewById(R.id.todo_new_date_time);
+        todoEndDateTime = (TextView) view.findViewById(R.id.todo_end_date_time);
+        acceptButton = (Button) view.findViewById(R.id.accept_button);
         deleteButton = (Button) view.findViewById(R.id.delete_button);
         cancelButton = (Button) view.findViewById(R.id.cancel_button);
 
-        saveButton.setOnClickListener(this);
+        acceptButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
 
         todoNameInput.setText(todo.getTodoName());
         todoRewardPointsInput.setText(new Integer(todo.getTodoRewardPoints()).toString());
-        todoDateTime.setText("created: " + todo.getTodoDateTime());
+        todoNewDateTime.setText("created: " + todo.getTodoSetupDateTimeString());
+        if(todo.getTodoStatus())
+            todoEndDateTime.setText("accomplished: " + todo.getTodoFinishDateTimeString());
+        else
+            todoEndDateTime.setHeight(0);
 
         return view;
     }
@@ -76,28 +81,32 @@ public class TodoEditFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch(v.getId()) {
 
-            case R.id.save_button:
-
-                todo.setTodoName(todoNameInput.getText().toString());
-                todo.setTodoRewardPoints(new Integer(todoRewardPointsInput.getText().toString()));
-                Toast.makeText(getContext(), "Task has been saved", Toast.LENGTH_SHORT).show();
+            case R.id.accept_button:
+                if (todoNameInput.getText().toString().length() == 0)
+                    Toast.makeText(getContext(), "Task name cannot be empty", Toast.LENGTH_SHORT).show();
+                else if (todoRewardPointsInput.getText().toString().length() == 0)
+                    Toast.makeText(getContext(), "Task value cannot be empty", Toast.LENGTH_SHORT).show();
+                else {
+                    todo.setTodoName(todoNameInput.getText().toString());
+                    todo.setTodoRewardPoints(new Integer(todoRewardPointsInput.getText().toString()));
+                    Toast.makeText(getContext(), "Task has been saved", Toast.LENGTH_SHORT).show();
+                TodoListFragment.updatePointsMeter(todoList);
 //                todo: tutaj zapisujemy dane
-                FileIO.saveDataToFile(todoList, getContext());
-                todoAdapter.notifyDataSetChanged();
-                Objects.requireNonNull(getActivity()).onBackPressed();
+//                    FileIO.saveDataToFile(todoList, getContext());
+                    todoAdapter.notifyDataSetChanged();
+                    Objects.requireNonNull(getActivity()).onBackPressed();
+                }
                 break;
 
             case R.id.delete_button:
-                if(todo.getTodoStatus())
-                    MainActivity.profile.addPoints(-(todo.getTodoRewardPoints()));
                 todoList.remove(position);
                 Toast.makeText(getContext(), "Task has been deleted", Toast.LENGTH_SHORT).show();
                 TodoListFragment.sortTodoListByStatus(todoList);
-                TodoListFragment.updatePointsMeter();
+                TodoListFragment.updatePointsMeter(todoList);
 //                todo: tutaj zapisujemy dane
-                FileIO.saveDataToFile(todoList, getContext());
+//                FileIO.saveDataToFile(todoList, getContext());
                 todoAdapter.notifyDataSetChanged();
                 Objects.requireNonNull(getActivity()).onBackPressed();
                 break;

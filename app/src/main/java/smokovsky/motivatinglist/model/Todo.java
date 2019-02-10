@@ -18,12 +18,15 @@ public class Todo {
 
     Date todoSetupDateTime;
 
+    Date todoFinishDateTime;
+
     public Todo (String todoName, boolean repeatable, int todoRewardPoints){
         this.todoName = todoName;
         this.todoStatus = false;
         this.todoRepeatable = repeatable;
         this.todoRewardPoints = todoRewardPoints;
         todoSetupDateTime = Calendar.getInstance().getTime();
+        todoFinishDateTime = new Date();
     }
 
     public Todo(){
@@ -32,6 +35,16 @@ public class Todo {
         todoRepeatable = false;
         todoRewardPoints = 0;
         todoSetupDateTime = Calendar.getInstance().getTime();
+        todoFinishDateTime = new Date();
+    }
+
+    public Todo(Todo repeatableInstance){
+        todoName = repeatableInstance.getTodoName();
+        todoStatus = true;
+        todoRepeatable = true;
+        todoRewardPoints = repeatableInstance.getTodoRewardPoints();
+        todoSetupDateTime = repeatableInstance.getTodoSetupDateTime();
+        todoFinishDateTime = new Date();
     }
 
     public String getTodoName() {
@@ -54,10 +67,22 @@ public class Todo {
 
     public void setTodoRepeatable(boolean todoRepeatable) { this.todoRepeatable = todoRepeatable; }
 
-    public String getTodoDateTime() {
+    public Date getTodoSetupDateTime(){ return todoSetupDateTime; }
+
+    public String getTodoSetupDateTimeString() {
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        String todoDatTime = df.format(todoSetupDateTime);
-        return todoDatTime;
+        String todoNewDateTime = df.format(todoSetupDateTime);
+        return todoNewDateTime;
+    }
+
+    public String getTodoFinishDateTimeString(){
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        String todoEndDateTime = df.format(todoFinishDateTime);
+        return todoEndDateTime;
+    }
+
+    public void setTodoFinishDateTime(){
+        todoFinishDateTime = Calendar.getInstance().getTime();
     }
 
 }

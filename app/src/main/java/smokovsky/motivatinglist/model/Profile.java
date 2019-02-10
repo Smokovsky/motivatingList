@@ -1,21 +1,34 @@
 package smokovsky.motivatinglist.model;
 
+import java.util.ArrayList;
+
 public class Profile {
 
     String name;
 
     int points;
 
+    ArrayList<Todo> todoList;
+
     public Profile(){
         name = "Unnamed";
-        points=0;
+        points = 0;
+        todoList = new ArrayList<Todo>();
     }
 
-    public void addPoints(int points){
-        this.points+=points;
+    public void setPoints(int points){
+        this.points = points;
     }
 
     public int getPoints(){
         return points;
+    }
+
+    public ArrayList<Todo> getTodoList(){
+        return todoList;
+    }
+
+    public void setTodoList(ArrayList<Todo> todoList){
+        this.todoList = todoList;
     }
 }

@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,7 +27,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     public static TextView pointsMeter;
 
 
-    public ArrayList<Todo> todoList;
+    public ArrayList<Todo> todoList = MainActivity.profile.getTodoList();
     private ArrayAdapter<Todo> todoAdapter;
 
     @Override
@@ -44,11 +45,10 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 //        todo: tutaj wczytujemy dane
 //        todoList = FileIO.loadDataFromFile(getContext());
 
-
 //        --------------------------------------------------------
 //        AKTUALNIE AKTYWNE
-//        todo: tutaj w zastepstwie jest generowany nowy ArrayList i kilka obiektów
-        todoList = new ArrayList<Todo>();
+//        todo: tutaj w zastepstwie jest generowane kilka obiektów
+
         todoList.add(new Todo("Posprzątać graty", false, 50));
         todoList.add(new Todo("Przykładowe zadanie", false, 40));
         todoList.add(new Todo("Wynieść śmieci", false, 70));
@@ -58,12 +58,11 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
         todoAdapter = new TodoAdapter(getContext(), todoList);
         todoListView.setAdapter(todoAdapter);
-
         addNewTaskButton.setOnClickListener(this);
         todoListView.setOnItemClickListener(this);
 
         sortTodoListByStatus(todoList);
-        updatePointsMeter();
+        updatePointsMeter(todoList);
         todoAdapter.notifyDataSetChanged();
 
         return view;
@@ -92,19 +91,6 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-    private void openEditTodoFragment(int position){
-        try {
-            getActivity()
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_todo_list, TodoEditFragment.newInstance(todoList, todoAdapter, position))
-                    .addToBackStack(null)
-                    .commit();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
     private void openNewTodoFragment(){
         try {
             getActivity()
@@ -118,8 +104,26 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-    public static void updatePointsMeter(){
-        pointsMeter.setText("Reward points: " + new Integer(MainActivity.profile.getPoints()).toString());
+    private void openEditTodoFragment(int position){
+        try {
+            getActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_todo_list, TodoEditFragment.newInstance(todoList, todoAdapter, position))
+                    .addToBackStack(null)
+                    .commit();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void updatePointsMeter(ArrayList<Todo> todoList){
+        int points = 0;
+        for(int i = 0; i < todoList.size(); i++)
+            if(todoList.get(i).getTodoStatus())
+                points += todoList.get(i).getTodoRewardPoints();
+        MainActivity.profile.setPoints(points);
+        pointsMeter.setText("Reward points: " + points);
     }
 
 

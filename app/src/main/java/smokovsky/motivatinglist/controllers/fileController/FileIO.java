@@ -8,20 +8,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
-import smokovsky.motivatinglist.model.Todo;
+import smokovsky.motivatinglist.model.Profile;
 
 public class FileIO {
 
-    public static final String FILENAME = "saveFile.dat";
+    public static final String FILENAME = "saveFileasdasd3.dat";
 
-    public static void saveDataToFile(ArrayList<Todo> itemsList, Context context){
+    public static void saveDataToFile(Profile p, Context context){
 
         try {
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(itemsList);
+            oos.writeObject(p);
             oos.close();
             fos.close();
         } catch (FileNotFoundException e){
@@ -31,17 +30,17 @@ public class FileIO {
         }
     }
 
-    public static ArrayList<Todo> loadDataFromFile(Context context){
+    public static Profile loadDataFromFile(Context context){
 
-        ArrayList<Todo> itemsList = null;
+        Profile p = null;
 
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            itemsList = (ArrayList<Todo>) ois.readObject();
+            p = (Profile) ois.readObject();
             fis.close();
         } catch (FileNotFoundException e){
-            itemsList = new ArrayList<Todo>();
+            p = new Profile();
             e.printStackTrace();
         } catch(IOException e){
             e.printStackTrace();
@@ -49,6 +48,6 @@ public class FileIO {
             e.printStackTrace();
         }
 
-        return itemsList;
+        return p;
     }
 }
