@@ -1,12 +1,13 @@
 package smokovsky.motivatinglist.model;
 
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Todo {
+public class Todo implements Serializable {
 
     String todoName;
 
@@ -68,6 +69,8 @@ public class Todo {
     public void setTodoRepeatable(boolean todoRepeatable) { this.todoRepeatable = todoRepeatable; }
 
     public Date getTodoSetupDateTime(){ return todoSetupDateTime; }
+
+    public Date getTodoFinishDateTime(){ return todoFinishDateTime; }
 
     public String getTodoSetupDateTimeString() {
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");

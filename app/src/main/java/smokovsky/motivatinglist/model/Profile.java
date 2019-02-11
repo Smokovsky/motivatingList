@@ -1,8 +1,9 @@
 package smokovsky.motivatinglist.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Profile {
+public class Profile implements Serializable {
 
     String name;
 

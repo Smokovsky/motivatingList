@@ -9,15 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 import smokovsky.motivatinglist.R;
+import smokovsky.motivatinglist.controllers.activities.MainActivity;
 import smokovsky.motivatinglist.controllers.fileController.FileIO;
 import smokovsky.motivatinglist.controllers.fragments.TodoListFragment;
 import smokovsky.motivatinglist.model.Todo;
@@ -43,6 +41,7 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         TextView todoRepeatable = (TextView) todoRow.findViewById(R.id.todo_repeatable);
         TextView todoFinishDate = (TextView) todoRow.findViewById(R.id.todo_finish_date);
         Button doneTodoButton = (Button) todoRow.findViewById(R.id.todo_done_button);
+        TextView doneTodoHighlight = (TextView) todoRow.findViewById(R.id.todo_done_button_highlight);
         Button deleteTodoButton = (Button) todoRow.findViewById(R.id.todo_delete_button);
         ConstraintLayout background = (ConstraintLayout) todoRow.findViewById(R.id.todo_background);
 
@@ -53,8 +52,7 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
                 Toast.makeText(getContext(), "Task has been deleted", Toast.LENGTH_SHORT).show();
                 TodoListFragment.sortTodoListByStatus(todoList);
                 TodoListFragment.updatePointsMeter(todoList);
-//               ! tutaj zapisujemy dane !
-//                FileIO.saveDataToFile(todoList, getContext());
+                FileIO.saveDataToFile(MainActivity.profile, getContext());
                 notifyDataSetChanged();
             }
         });
@@ -65,14 +63,16 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
                 if(todo.getTodoRepeatable() == true) {
                     Todo repeatableInstance = new Todo(todo);
                     repeatableInstance.setTodoStatus(true);
+                    repeatableInstance.setTodoFinishDateTime();
                     todoList.add(repeatableInstance);
                 } else {
+                    todo.setTodoFinishDateTime();
                     todo.setTodoStatus(!todo.getTodoStatus());
                 }
                 TodoListFragment.sortTodoListByStatus(todoList);
                 TodoListFragment.updatePointsMeter(todoList);
-//                ! tutaj zapisujemy dane !
-//                FileIO.saveDataToFile(todoList, getContext());
+
+                FileIO.saveDataToFile(MainActivity.profile, getContext());
                 notifyDataSetChanged();
             }
         });
@@ -81,17 +81,23 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         if(todo.getTodoStatus()) {
             background.setBackgroundColor(Color.rgb(128,128,128));
             todoName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            doneTodoButton.setText("Undo");
+            doneTodoButton.setText("UNDO");
+            doneTodoHighlight.setBackgroundColor(0xFFC0B301);
             doneTodoButton.setBackgroundColor(Color.rgb(96,96,96));
             deleteTodoButton.setBackgroundColor(Color.rgb(96,96,96));
             todoFinishDate.setVisibility(View.VISIBLE);
+
             // Wpis powtarzalnego zadania - usuwamy undo
-            if(todo.getTodoRepeatable()==true)
+            if(todo.getTodoRepeatable()==true) {
                 doneTodoButton.setVisibility(View.INVISIBLE);
+                doneTodoHighlight.setVisibility(View.INVISIBLE);
+            }
+
         } else {
             background.setBackgroundColor(Color.rgb(239, 239, 239));
             todoName.setPaintFlags(0);
-            doneTodoButton.setText("Done");
+            doneTodoButton.setText("\u2713");
+            doneTodoHighlight.setBackgroundColor(0xFF22BB06);
             doneTodoButton.setBackgroundColor(Color.rgb(192,192,192));
             deleteTodoButton.setBackgroundColor(Color.rgb(192,192,192));
             todoFinishDate.setVisibility(View.INVISIBLE);
@@ -100,7 +106,7 @@ public class TodoAdapter extends ArrayAdapter<Todo> {
         if(!todo.getTodoRepeatable())
             todoRepeatable.setHeight(0);
 
-        todoName.setText(todo.getTodoName() + " (" + todo.getTodoRewardPoints() + ")");
+        todoName.setText(todo.getTodoName() + "\n" + todo.getTodoRewardPoints() + " points");
         todoFinishDate.setText("Done " + todo.getTodoFinishDateTimeString());
         return todoRow;
     }

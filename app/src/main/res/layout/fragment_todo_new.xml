@@ -13,7 +13,7 @@
         android:padding="5dp">
 
         <LinearLayout
-            android:id="@+id/edit_todo_name"
+            android:id="@+id/new_todo_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/todo_name_field"
+                android:id="@+id/new_todo_name_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -40,7 +40,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/edit_todo_reward_points"
+            android:id="@+id/new_todo_reward_points"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="8dp"
@@ -48,7 +48,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_todo_name">
+            app:layout_constraintTop_toBottomOf="@+id/new_todo_name">
 
             <TextView
                 android:layout_width="0dp"
@@ -60,7 +60,7 @@
                 android:text="Reward points" />
 
             <EditText
-                android:id="@+id/todo_points_field"
+                android:id="@+id/new_todo_points_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -73,13 +73,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/edit_todo_repeatable"
+            android:id="@+id/new_todo_repeatable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_todo_reward_points">
+            app:layout_constraintTop_toBottomOf="@+id/new_todo_reward_points">
 
             <TextView
                 android:layout_width="0dp"
@@ -89,7 +89,7 @@
                 android:text="Repeatable" />
 
             <CheckBox
-                android:id="@+id/todo_repeatable_field"
+                android:id="@+id/new_todo_repeatable_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
@@ -98,7 +98,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/add_button"
+            android:id="@+id/new_todo_add_button"
             android:text="Add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,16 +107,16 @@
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_todo_repeatable" />
+            app:layout_constraintTop_toBottomOf="@+id/new_todo_repeatable" />
 
         <Button
-            android:id="@+id/cancel_button"
+            android:id="@+id/new_todo_cancel_button"
             android:text="Back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_button" />
+            app:layout_constraintTop_toBottomOf="@+id/new_todo_add_button" />
 
     </android.support.constraint.ConstraintLayout>
 

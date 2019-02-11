@@ -13,7 +13,7 @@ import smokovsky.motivatinglist.model.Profile;
 
 public class FileIO {
 
-    public static final String FILENAME = "saveFileasdasd3.dat";
+    public static final String FILENAME = "save.dat";
 
     public static void saveDataToFile(Profile p, Context context){
 
@@ -22,7 +22,6 @@ public class FileIO {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(p);
             oos.close();
-            fos.close();
         } catch (FileNotFoundException e){
             e.printStackTrace();
         } catch(IOException e){
@@ -38,7 +37,7 @@ public class FileIO {
             FileInputStream fis = context.openFileInput(FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
             p = (Profile) ois.readObject();
-            fis.close();
+            ois.close();
         } catch (FileNotFoundException e){
             p = new Profile();
             e.printStackTrace();
