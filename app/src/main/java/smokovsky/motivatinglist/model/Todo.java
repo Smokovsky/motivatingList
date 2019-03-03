@@ -1,25 +1,25 @@
 package smokovsky.motivatinglist.model;
 
-
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class Todo implements Serializable {
 
-    String todoName;
+    private String todoName;
 
-    boolean todoStatus;
+    private boolean todoStatus;
 
-    boolean todoRepeatable;
+    private boolean todoRepeatable;
 
-    int todoRewardPoints;
+    private int todoRewardPoints;
 
-    Date todoSetupDateTime;
+    private Date todoSetupDateTime;
 
-    Date todoFinishDateTime;
+    private Date todoFinishDateTime;
 
     public Todo (String todoName, boolean repeatable, int todoRewardPoints){
         this.todoName = todoName;
@@ -30,14 +30,14 @@ public class Todo implements Serializable {
         todoFinishDateTime = new Date();
     }
 
-    public Todo(){
-        todoName = "";
-        todoStatus = false;
-        todoRepeatable = false;
-        todoRewardPoints = 0;
-        todoSetupDateTime = Calendar.getInstance().getTime();
-        todoFinishDateTime = new Date();
-    }
+//    public Todo(){
+//        todoName = "";
+//        todoStatus = false;
+//        todoRepeatable = false;
+//        todoRewardPoints = 0;
+//        todoSetupDateTime = Calendar.getInstance().getTime();
+//        todoFinishDateTime = new Date();
+//    }
 
     public Todo(Todo repeatableInstance){
         todoName = repeatableInstance.getTodoName();
@@ -66,26 +66,23 @@ public class Todo implements Serializable {
 
     public boolean getTodoRepeatable() { return todoRepeatable; }
 
-    public void setTodoRepeatable(boolean todoRepeatable) { this.todoRepeatable = todoRepeatable; }
+//    public void setTodoRepeatable(boolean todoRepeatable) { this.todoRepeatable = todoRepeatable; }
+
 
     public Date getTodoSetupDateTime(){ return todoSetupDateTime; }
 
     public Date getTodoFinishDateTime(){ return todoFinishDateTime; }
 
+    public void setTodoFinishDateTime(){ todoFinishDateTime = Calendar.getInstance().getTime(); }
+
     public String getTodoSetupDateTimeString() {
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        String todoNewDateTime = df.format(todoSetupDateTime);
-        return todoNewDateTime;
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH);
+        return df.format(todoSetupDateTime);
     }
 
     public String getTodoFinishDateTimeString(){
-        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        String todoEndDateTime = df.format(todoFinishDateTime);
-        return todoEndDateTime;
-    }
-
-    public void setTodoFinishDateTime(){
-        todoFinishDateTime = Calendar.getInstance().getTime();
+        DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.ENGLISH);
+        return df.format(todoFinishDateTime);
     }
 
 }

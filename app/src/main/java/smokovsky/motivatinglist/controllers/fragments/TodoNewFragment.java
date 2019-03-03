@@ -1,6 +1,8 @@
 package smokovsky.motivatinglist.controllers.fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,18 +29,17 @@ public class TodoNewFragment extends Fragment implements View.OnClickListener {
     private EditText todoNameInput;
     private EditText todoRewardPointsInput;
     private CheckBox todoRepeatableInput;
-    private Button saveButton;
-    private Button cancelButton;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_todo_new, container, false);
 
         todoNameInput = (EditText) view.findViewById(R.id.new_todo_name_field);
         todoRewardPointsInput = (EditText) view.findViewById(R.id.new_todo_points_field);
         todoRepeatableInput = (CheckBox) view.findViewById(R.id.new_todo_repeatable_field);
-        saveButton = (Button) view.findViewById(R.id.new_todo_add_button);
-        cancelButton = (Button) view.findViewById(R.id.new_todo_cancel_button);
+
+        Button saveButton = (Button) view.findViewById(R.id.new_todo_add_button);
+        Button cancelButton = (Button) view.findViewById(R.id.new_todo_cancel_button);
 
         saveButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
@@ -61,16 +62,17 @@ public class TodoNewFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.new_todo_add_button:
-
                 if(todoNameInput.getText().toString().length()==0)
-                    Toast.makeText(getContext(), "Please enter todo name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.todo_name_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 else if (todoRewardPointsInput.getText().toString().length() == 0)
-                    Toast.makeText(getContext(), "Please enter todo reward points", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.todo_value_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 else{
-                    todoList.add(new Todo(todoNameInput.getText().toString(), todoRepeatableInput.isChecked(), new Integer(todoRewardPointsInput.getText().toString())));
-                    TodoListFragment.sortTodoListByStatus(todoList);
-                    FileIO.saveDataToFile(MainActivity.profile, getContext());
+                    todoList.add(new Todo(todoNameInput.getText().toString(), todoRepeatableInput.isChecked(), Integer.valueOf(todoRewardPointsInput.getText().toString())));
+                    TodoListFragment.hideKeyboard(Objects.requireNonNull(getActivity()));
+                    TodoListFragment.sortTodoList(todoList);
+                    FileIO.saveDataToFile(MainActivity.profile, Objects.requireNonNull(getContext()));
                     todoAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), getString(R.string.task_has_been_added), Toast.LENGTH_SHORT).show();
                     Objects.requireNonNull(getActivity()).onBackPressed();
                 }
                 break;

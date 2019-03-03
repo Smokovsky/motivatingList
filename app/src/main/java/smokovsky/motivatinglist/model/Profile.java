@@ -5,16 +5,17 @@ import java.util.ArrayList;
 
 public class Profile implements Serializable {
 
-    String name;
+    String profileName;
 
     int points;
 
     ArrayList<Todo> todoList;
+    ArrayList<Reward> rewardList;
 
     public Profile(){
-        name = "Unnamed";
         points = 0;
         todoList = new ArrayList<Todo>();
+        rewardList = new ArrayList<Reward>();
     }
 
     public void setPoints(int points){
@@ -31,5 +32,13 @@ public class Profile implements Serializable {
 
     public void setTodoList(ArrayList<Todo> todoList){
         this.todoList = todoList;
+    }
+
+    public ArrayList<Reward> getRewardList(){
+        return rewardList;
+    }
+
+    public void setRewardList(ArrayList<Reward> rewardList){
+        this.rewardList = rewardList;
     }
 }

@@ -2,6 +2,7 @@ package smokovsky.motivatinglist.controllers.fileController;
 
 import android.content.Context;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,7 +14,7 @@ import smokovsky.motivatinglist.model.Profile;
 
 public class FileIO {
 
-    public static final String FILENAME = "save.dat";
+    private static final String FILENAME = "xS2aDdveFsizlfdsfgexex.dat";
 
     public static void saveDataToFile(Profile p, Context context){
 
@@ -31,15 +32,15 @@ public class FileIO {
 
     public static Profile loadDataFromFile(Context context){
 
-        Profile p = null;
+        Profile profile = null;
 
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            p = (Profile) ois.readObject();
+            profile = (Profile) ois.readObject();
             ois.close();
         } catch (FileNotFoundException e){
-            p = new Profile();
+            profile = new Profile();
             e.printStackTrace();
         } catch(IOException e){
             e.printStackTrace();
@@ -47,6 +48,6 @@ public class FileIO {
             e.printStackTrace();
         }
 
-        return p;
+        return profile;
     }
 }

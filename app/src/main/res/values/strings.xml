@@ -1,4 +1,34 @@
 <resources>
-    <string name="app_name">motivatingList</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="app_name">Motivating List</string>
+
+    <string name="add_new_todo">Add new todo</string>
+    <string name="add_new_reward">Add new reward</string>
+
+    <string name="task_has_been_added">Todo has been added</string>
+    <string name="todo_has_been_saved">Todo has been saved</string>
+    <string name="todo_has_been_deleted">Todo has been deleted</string>
+    <string name="reward_has_been_added">Reward has been added</string>
+    <string name="reward_has_been_saved">Reward has been saved</string>
+    <string name="reward_has_been_deleted">Reward has been deleted</string>
+
+    <string name="todo_name_cannot_be_empty">Todo name cannot be empty</string>
+    <string name="todo_value_cannot_be_empty">Todo value cannot be empty</string>
+    <string name="reward_name_cannot_be_empty">Reward name cannot be empty</string>
+    <string name="reward_value_cannot_be_empty">Reward value cannot be empty</string>
+
+    <string name="accomplished">accomplished:</string>
+    <string name="created">created:</string>
+
+    <string name="symbol_done">\u2713</string>
+    <string name="symbol_delete">\u2718</string>
+    <string name="symbol_repeatable">\u21ba</string>
+
+    <string name="reward_points">Reward points:</string>
+
+
+
+
+
+
 </resources>

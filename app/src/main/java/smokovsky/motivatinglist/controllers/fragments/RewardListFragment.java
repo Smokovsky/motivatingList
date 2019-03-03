@@ -23,54 +23,60 @@ import java.util.Objects;
 
 import smokovsky.motivatinglist.R;
 import smokovsky.motivatinglist.controllers.activities.MainActivity;
-import smokovsky.motivatinglist.controllers.adapters.TodoAdapter;
-import smokovsky.motivatinglist.model.Todo;
+import smokovsky.motivatinglist.controllers.adapters.RewardAdapter;
+import smokovsky.motivatinglist.model.Reward;
 
-public class TodoListFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener  {
+public class RewardListFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener  {
 
-    private ArrayList<Todo> todoList = MainActivity.profile.getTodoList();
-    private ArrayAdapter<Todo> todoAdapter;
+    private ArrayList<Reward> rewardList = MainActivity.profile.getRewardList();
+    private ArrayAdapter<Reward> rewardAdapter;
     private TextView pointsCounter;
 
-    public static TodoListFragment newInstance(TextView pointsCounter) {
-        TodoListFragment fragment = new TodoListFragment();
+    public static RewardListFragment newInstance(TextView pointsCounter) {
+        RewardListFragment fragment = new RewardListFragment();
         fragment.pointsCounter = pointsCounter;
 
         return fragment;
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_todo_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_reward_list, container, false);
 
-        Button addNewTaskButton = view.findViewById(R.id.todo_list_add_button);
-        ListView todoListView = view.findViewById(R.id.todo_list_todo_list);
+        Button addNewRewardButton = view.findViewById(R.id.reward_list_add_button);
+        ListView rewardListView = view.findViewById(R.id.reward_list_reward_list);
 
-        todoAdapter = new TodoAdapter(getContext(), todoList, pointsCounter);
-        todoListView.setAdapter(todoAdapter);
-        addNewTaskButton.setOnClickListener(this);
-        todoListView.setOnItemClickListener(this);
+        rewardAdapter = new RewardAdapter(getContext(), rewardList, pointsCounter);
+        rewardListView.setAdapter(rewardAdapter);
+        addNewRewardButton.setOnClickListener(this);
+        rewardListView.setOnItemClickListener(this);
 
-        sortTodoList(todoList);
+        sortRewardList(rewardList);
         updatePointsCounter();
-        todoAdapter.notifyDataSetChanged();
+        rewardAdapter.notifyDataSetChanged();
 
         return view;
     }
 
-    public static void sortTodoList(ArrayList<Todo> todoList){
-        Collections.sort(todoList, new Comparator<Todo>() {
+    public static void sortRewardList(ArrayList<Reward> rewardList){
+        Collections.sort(rewardList, new Comparator<Reward>() {
             @Override
-            public int compare(Todo o1, Todo o2) {
-                if(o1.getTodoStatus() == o2.getTodoStatus())
-                    if(o1.getTodoStatus())
-                        return o2.getTodoFinishDateTime().compareTo(o1.getTodoFinishDateTime());
+            public int compare(Reward o1, Reward o2) {
+                if(o1.getRewardStatus() == o2.getRewardStatus())
+                    if(o1.getRewardStatus())
+                        return o2.getRewardFinishDateTime().compareTo(o1.getRewardFinishDateTime());
                     else
-                        return o2.getTodoSetupDateTime().compareTo(o1.getTodoSetupDateTime());
+                        return o2.getRewardSetupDateTime().compareTo(o1.getRewardSetupDateTime());
                 else
-                    return Boolean.compare(o1.getTodoStatus(),o2.getTodoStatus());
+                    return Boolean.compare(o1.getRewardStatus(),o2.getRewardStatus());
             }
         });
     }
@@ -85,24 +91,24 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        openEditTodoFragment(position);
+        openEditRewardFragment(position);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.todo_list_add_button:
-                openNewTodoFragment();
+            case R.id.reward_list_add_button:
+                openNewRewardFragment();
                 break;
         }
     }
 
-    private void openNewTodoFragment(){
+    private void openNewRewardFragment(){
         try {
             Objects.requireNonNull(getActivity())
                     .getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_todo_list, TodoNewFragment.newInstance(todoList, todoAdapter))
+                    .replace(R.id.fragment_reward_list, RewardNewFragment.newInstance(rewardList, rewardAdapter))
                     .addToBackStack(null)
                     .commit();
         } catch (Exception e){
@@ -110,12 +116,12 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-    private void openEditTodoFragment(int position){
+    private void openEditRewardFragment(int position){
         try {
             Objects.requireNonNull(getActivity())
                     .getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_todo_list, TodoEditFragment.newInstance(todoList, todoAdapter, position, pointsCounter))
+                    .replace(R.id.fragment_reward_list, RewardEditFragment.newInstance(rewardList, rewardAdapter, position, pointsCounter))
                     .addToBackStack(null)
                     .commit();
         } catch (Exception e){
@@ -124,6 +130,7 @@ public class TodoListFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void updatePointsCounter(){
-        pointsCounter.setText(String.format("%s %s",getString(R.string.reward_points),Integer.toString(MainActivity.profile.getPoints())));
+        pointsCounter.setText(String.format("%s%s",getString(R.string.reward_points),Integer.toString(MainActivity.profile.getPoints())));
     }
+
 }

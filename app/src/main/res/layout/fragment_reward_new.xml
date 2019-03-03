@@ -4,17 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:clickable="true">
+    android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFF"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:clickable="true">
 
         <LinearLayout
-            android:id="@+id/edit_todo_name"
+            android:id="@+id/new_reward_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -26,12 +26,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <EditText
-                android:id="@+id/edit_todo_name_field"
+                android:id="@+id/new_reward_name_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="1"
+                android:layout_weight="5"
                 android:backgroundTint="@color/colorPrimary"
                 android:hint="Task name"
                 android:inputType="text"
@@ -41,7 +41,7 @@
 
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/edit_todo_reward_points"
+            android:id="@+id/new_reward_reward_points"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_marginTop="8dp"
@@ -49,7 +49,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_todo_name">
+            app:layout_constraintTop_toBottomOf="@+id/new_reward_name">
 
             <TextView
                 android:layout_width="0dp"
@@ -61,7 +61,7 @@
                 android:text="Reward points" />
 
             <EditText
-                android:id="@+id/edit_todo_points_field"
+                android:id="@+id/new_reward_points_field"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -73,51 +73,51 @@
                 android:inputType="number" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/edit_todo_new_date_time"
+        <LinearLayout
+            android:id="@+id/new_reward_repeatable"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_todo_reward_points" />
+            app:layout_constraintTop_toBottomOf="@+id/new_reward_reward_points">
 
-        <TextView
-            android:id="@+id/edit_todo_end_date_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_todo_new_date_time" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="18"
+                android:paddingLeft="20dp"
+                android:text="Repeatable" />
 
-        <Button
-            android:id="@+id/edit_todo_accept_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/edit_todo_name"
-            android:text="Save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_todo_end_date_time" />
+            <CheckBox
+                android:id="@+id/new_reward_repeatable_field"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="2" />
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/edit_todo_delete_button"
-            android:text="Delete"
+            android:id="@+id/new_reward_add_button"
+            android:text="Add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_reward_name"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_todo_accept_button" />
+            app:layout_constraintTop_toBottomOf="@+id/new_reward_repeatable" />
 
         <Button
-            android:id="@+id/edit_todo_cancel_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/new_reward_cancel_button"
             android:text="Back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_todo_delete_button" />
+            app:layout_constraintTop_toBottomOf="@+id/new_reward_add_button" />
 
     </android.support.constraint.ConstraintLayout>
 
